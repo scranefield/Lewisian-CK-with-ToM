@@ -1,0 +1,42 @@
+% Queries to run to check for common knowledge of traitor(hipparchus)
+% Copy and paste each query to the Prolog interpreter. DO NOT copy the "?-".
+
+% 1. Consult required Prolog code
+?- ['finin_pfc/pfc1.2/src/pfc', utility_preds, indication, scenario, ck_checks].
+
+% 2. Check that rules pass constraints on ToM rules
+?- rules_valid.
+
+% 3. Check whether the agent believes Hipparchus is a traitor. Press return after the result
+?- bel(top, traitor(hipparchus)).
+
+% 4. Find the percepts in top>>af that indicate traitor(hipparchus)
+
+% For this query, press ";" after each result to check for additional answers
+% When there are no more answers, "false" will be printed. This just means that
+% the search for additional answers failed.
+%
+% There are two answers because percept(..., location(me, agora)))
+% implies the "affordance" and "states" percepts - see the percept implication
+% beliefs in scenario.pl. The latter two 'cover' the location percept, i.e.
+% they will only be perceived if the agora location is perceived. The two
+% answers can both indicate the belief that Hipparchus is a traitor
+
+?- percepts(top>>af, I) ind bel(top>>af, traitor(hipparchus)).
+
+% 5. If the following tests all succeed, we have common knowledge of traitor(hipparchus)
+
+?- pfc(c1([affordance(m27, public_information), states(m27, traitor(hipparchus))])).
+
+?- pfc(c2([affordance(m27, public_information), states(m27, traitor(hipparchus))])).
+
+?- pfc(c3([affordance(m27, public_information), states(m27, traitor(hipparchus))], traitor(hipparchus))).
+
+?- isomorphic_models(top>>af, top>>af>>af).
+
+% 6. All in one goal
+?- pfc(ck(traitor(hipparchus))).
+
+% 7. To exit Prolog
+?- halt.
+
